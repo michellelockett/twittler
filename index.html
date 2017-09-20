@@ -81,7 +81,6 @@ streams.users is an object with properties for each user. streams.users.shawndro
                 var message = object.message
                 var time = object.created_at;
                 var $time = jQuery.timeago(time);
-                console.log($time);
 
                 if (!alreadyAdded.includes(message)) {
                  
@@ -99,9 +98,10 @@ streams.users is an object with properties for each user. streams.users.shawndro
         
         
           $('#new-tweets').on('click', function() {
-        
+            
             var index = streams.home.length - 1;
             while(index >= 0){
+              
               var tweet = streams.home[index];
               var $tweet = $('<p></p>');
               var user = tweet.user;
@@ -117,6 +117,7 @@ streams.users is an object with properties for each user. streams.users.shawndro
               }
               index -= 1;
             }
+            
           });
 
           $('body').on('click', '.user' , function() {

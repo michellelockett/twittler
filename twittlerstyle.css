@@ -27,8 +27,7 @@ input{
 
 .header, .footer{
 	text-align: center;
-	color: #5b4325;
-	background-color: #e8c0e4;
+	background-color: skyblue;
 	height: 130px;
 	padding: 1px;
 	width: 100%;
@@ -41,9 +40,7 @@ input{
 .col-container{
 	width: 100%;	
 	display: table;	
-	border-width: 2px;
-	border-color: #e8c0e4;
-	border-left-style: solid;
+	
 
 	
 }
@@ -58,7 +55,7 @@ input{
 }
 
 .col-right{
-	background-color: #c6af9b;
+	background-color: #ede5de;
 	min-height: 800px;
 	display: table-cell;
 	width: 40%;
@@ -76,20 +73,20 @@ input{
     border-radius: 5px;
 }
 .user{
-	background-color: #91bff2;
+	color: blue;
 	text-decoration: underline;
 	font-size: 20px;
-	border-radius: 10px;
 	padding: 0px 5px 0px 5px;
 
 }
 
 .user:hover {
-	background-color: #4c6682;
+	color: #4c6682;
 	cursor: pointer;
 }
 
 #clear{
 	margin-bottom: 50px;
+	background-color: white;
 }
 
