@@ -11,6 +11,7 @@ streams.users is an object with properties for each user. streams.users.shawndro
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
     <script src="jquery.timeago.js" type="text/javascript"></script>
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="twittlerstyle.css" />
   
   </head>
@@ -19,7 +20,7 @@ streams.users is an object with properties for each user. streams.users.shawndro
    
     <div class="header">
       <h1>Twittler Fake!</h1>
-      <form>Submit a tweet:<input type="text" name="visitor-tweet"><button type="button" id="submit">Submit</button></form>
+      <form>Submit a tweet:<input type="text" name="visitor-tweet" id="visitor-message"><button type="button" id="submit">Submit</button></form>
     </div>
 
     <div class="col-container">
@@ -50,12 +51,18 @@ streams.users is an object with properties for each user. streams.users.shawndro
       <script>
 
         $(document).ready(function(){
-          var visitor = "@shelldog42";
+          window.visitor = "@shelldog42";
           var alreadyAdded = [];
           var generated = [];
           var appendedUserName = false;
           var selectedUser;
           $("time.timeago").timeago();
+
+          var getTweet = function() {
+            var input = $('input').val();
+            return input;
+
+          }
 
           function getTweetsByUser(user) {
             var tweets = streams.users[user];
@@ -122,6 +129,12 @@ streams.users is an object with properties for each user. streams.users.shawndro
             clear('individual');
             console.log('test');
           });
+
+          $('#submit').on('click', function() {
+            writeTweet(getTweet());
+          });
+
+         
 
           
         });

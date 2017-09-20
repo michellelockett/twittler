@@ -1,5 +1,10 @@
+*{
+	font-family: "HelveticaNeue-light";
+}
+
 .body{
 	background-color: #49443e;
+
 }
 .time-stamp{
 	
@@ -16,7 +21,7 @@ p{
 }
 
 input{
-	margin-left: 5px;
+	margin-left: 10px;
 	margin-right: 20px;
 }
 
@@ -26,6 +31,8 @@ input{
 	background-color: #e8c0e4;
 	height: 130px;
 	padding: 1px;
+	width: 100%;
+	
 }
 .footer{
 	height: 20px;
@@ -34,6 +41,11 @@ input{
 .col-container{
 	width: 100%;	
 	display: table;	
+	border-width: 2px;
+	border-color: #e8c0e4;
+	border-left-style: solid;
+
+	
 }
 
  
@@ -41,7 +53,7 @@ input{
 	background-color: white;
 	min-height: 800px;
 	display: table-cell;
-	width : 66%;
+	width : 60%;
 
 }
 
@@ -49,7 +61,7 @@ input{
 	background-color: #c6af9b;
 	min-height: 800px;
 	display: table-cell;
-	width: 34%;
+	width: 40%;
 }
 
 .button {
