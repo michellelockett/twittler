@@ -1,27 +1,131 @@
+<!--users is an array of strings -- all the usernames that you're following.
+streams is an object with two properties, users and home.
+streams.home is an array of all tweets from all the users you're following.
+streams.users is an object with properties for each user. streams.users.shawndrost has all of shawndrost's tweets.
+-->
+
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
   <head>
+    <meta charset = "UTF-8">
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <script src="jquery.timeago.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="twittlerstyle.css" />
+  
   </head>
+
   <body>
-    <script>
+   
+    <div class="header">
+      <h1>Twittler Fake!</h1>
+      <form>Submit a tweet:<input type="text" name="visitor-tweet"><button type="button" id="submit">Submit</button></form>
+    </div>
 
-      $(document).ready(function(){
-        var $body = $('body');
-        $body.html('');
+    <div class="col-container">
 
-        var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
-          index -= 1;
-        }
+      <div class="col-left">
+        <button class="button" type="button" id="new-tweets">Click for New Tweets</button>
+        <h2>Click on a username to view just their tweets</h2>
 
-      });
+        <div class="tweets" id="all-tweets">
+        </div>
+      </div>
 
-    </script>
+      <div class="col-right">
+        <button class="button" type="button" id="clear">Click to clear Tweets</button>
+        
+        <div class="tweets" id = "individual">
+          
+        </div>
+      </div>
+    
+
+    </div>
+    
+
+    <div class="footer">Created for Hack Reactor Precourse</div>
+
+
+      <script>
+
+        $(document).ready(function(){
+          var visitor = "@shelldog42";
+          var alreadyAdded = [];
+          var generated = [];
+          var appendedUserName = false;
+          var selectedUser;
+          $("time.timeago").timeago();
+
+          function getTweetsByUser(user) {
+            var tweets = streams.users[user];
+            return tweets;
+          }
+      
+          function displayTweets(username) {
+            var tweets=getTweetsByUser(username);
+            if (appendedUserName===false) {
+              $('#individual').append('<span class=\'user\' id=\'title-name\'> @' + username + '</span>');
+              appendedUserName = true;
+            }
+            
+            tweets.forEach(function(object) {
+                var user = object.user;
+                var message = object.message
+                var time = object.created_at;
+                var $time = jQuery.timeago(time);
+                console.log($time);
+
+                if (!alreadyAdded.includes(message)) {
+                 
+                  $('#individual').append('<p> ' + message + "<span class=\'time-stamp\'>\t\t" + $time + ' </span></p>');  
+                }
+                alreadyAdded.push(message);
+            });
+          }
+
+          var clear = function(elementID) {
+            (document).getElementById(elementID).innerHTML = "";
+            appendedUserName = false;
+            alreadyAdded = [];
+          }
+        
+        
+          $('#new-tweets').on('click', function() {
+        
+            var index = streams.home.length - 1;
+            while(index >= 0){
+              var tweet = streams.home[index];
+              var $tweet = $('<p></p>');
+              var user = tweet.user;
+              var $user = $('<span class=\'user\'></span>');
+              var time = tweet.created_at;
+              var $time = jQuery.timeago(time);
+              $user.text('@' + user + ':');
+              $tweet.text(tweet.message)
+              $user.data('name', user);
+              if (generated.includes(tweet) === false) {
+                $('#all-tweets').append($user, ['<span>' + tweet.message + '</span><span class= \'time-stamp\'>\t\t' + $time+  ' </span></p>']);
+                generated.push(tweet);
+              }
+              index -= 1;
+            }
+          });
+
+          $('body').on('click', '.user' , function() {
+            clear('individual');
+            var currentUser = $(this).data('name');
+            displayTweets(currentUser);
+          });
+
+          $('#clear').on('click', function() {
+            clear('individual');
+            console.log('test');
+          });
+
+          
+        });
+
+    </script>   
   </body>
 </html>
