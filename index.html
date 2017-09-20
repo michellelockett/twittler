@@ -2,6 +2,11 @@
 streams is an object with two properties, users and home.
 streams.home is an array of all tweets from all the users you're following.
 streams.users is an object with properties for each user. streams.users.shawndrost has all of shawndrost's tweets.
+
+Make the refreshes prettier to look at, maybe animate?
+
+Allow a user to make a tweet
+
 -->
 
 <!DOCTYPE html>
@@ -34,7 +39,10 @@ streams.users is an object with properties for each user. streams.users.shawndro
       </div>
 
       <div class="col-right">
+        
         <button class="button" type="button" id="clear">Click to clear Tweets</button>
+
+        <div id="title-user"></div>
         
         <div class="tweets" id = "individual">
           
@@ -50,94 +58,118 @@ streams.users is an object with properties for each user. streams.users.shawndro
 
       <script>
 
-        $(document).ready(function(){
-          window.visitor = "@shelldog42";
-          var alreadyAdded = [];
-          var generated = [];
-          var appendedUserName = false;
-          var selectedUser;
-          $("time.timeago").timeago();
+          $(document).ready(function(){
+            window.visitor = "@shelldog42";
+            var alreadyAdded = [];
+            var generated = [];
+            var selectedUser;
+            //set any time element with the class timeago to be a readable version e.g. "2 hours ago"
+            $("time.timeago").timeago();
 
-          var getTweet = function() {
-            var input = $('input').val();
-            return input;
+            //a function to retrieve input from the submit a tweet form
 
-          }
-
-          function getTweetsByUser(user) {
-            var tweets = streams.users[user];
-            return tweets;
-          }
-      
-          function displayTweets(username) {
-            var tweets=getTweetsByUser(username);
-            if (appendedUserName===false) {
-              $('#individual').append('<span class=\'user\' id=\'title-name\'> @' + username + '</span>');
-              appendedUserName = true;
+            var getTweet = function() {
+              var input = $('input').val();
+              return input;
             }
-            
-            tweets.forEach(function(object) {
-                var user = object.user;
-                var message = object.message
-                var time = object.created_at;
+
+            //get all tweets from any individual user
+
+            function getTweetsByUser(user) {
+              var tweets = streams.users[user];
+              console.log(tweets);
+              return tweets;
+            }
+
+            //clear all content from any element by the element's ID
+
+            var clear = function(elementID) {
+              (document).getElementById(elementID).innerHTML = "";
+              alreadyAdded = [];
+            }
+
+            //when you click on an individual username, it will display only their 
+            //tweets on the right side of the page
+        
+            function displayTweets(username) {
+              //get all tweets of just this user
+              var tweets=getTweetsByUser(username);
+              //clear any previous user from the right side of the page
+              clear('title-user');
+              var $username = $('<span class=\'user\' id=\'title-name\'></span>');
+              $username.data('name', username);
+              $username.text('@' + username + ':');
+
+              //add the new user's name to the top of the right column
+              $('#title-user').append($username);
+
+              //iterate through the user's tweets from the back, so they display in reverse chronological order
+              //display their tweets on the right column
+              var index = tweets.length - 1;
+              while(index >= 0){
+                
+                var tweet = tweets[index];
+                var user = tweet.user;
+                var time = tweet.created_at;
                 var $time = jQuery.timeago(time);
-
-                if (!alreadyAdded.includes(message)) {
-                 
-                  $('#individual').append('<p> ' + message + "<span class=\'time-stamp\'>\t\t" + $time + ' </span></p>');  
+                var message =(tweet.message)
+                if (!alreadyAdded.includes(tweet)) {
+                  ($('#individual').append('<p> ' + message + "<span class=\'time-stamp\'>\t\t" + $time + ' </span></p>'));
+                  alreadyAdded.push(tweet);
                 }
-                alreadyAdded.push(message);
-            });
-          }
-
-          var clear = function(elementID) {
-            (document).getElementById(elementID).innerHTML = "";
-            appendedUserName = false;
-            alreadyAdded = [];
-          }
-        
-        
-          $('#new-tweets').on('click', function() {
-            
-            var index = streams.home.length - 1;
-            while(index >= 0){
-              
-              var tweet = streams.home[index];
-              var $tweet = $('<p></p>');
-              var user = tweet.user;
-              var $user = $('<span class=\'user\'></span>');
-              var time = tweet.created_at;
-              var $time = jQuery.timeago(time);
-              $user.text('@' + user + ':');
-              $tweet.text(tweet.message)
-              $user.data('name', user);
-              if (generated.includes(tweet) === false) {
-                $('#all-tweets').append($user, ['<span>' + tweet.message + '</span><span class= \'time-stamp\'>\t\t' + $time+  ' </span></p>']);
-                generated.push(tweet);
-              }
-              index -= 1;
+                index -= 1;
+              }            
             }
-            
-          });
+            //a function to either initially retrieve or update all tweets from all users
+            //displays them in reverse chronological order in the left column
+            //updates each time the new tweets button is clicked
 
-          $('body').on('click', '.user' , function() {
-            clear('individual');
-            var currentUser = $(this).data('name');
-            displayTweets(currentUser);
-          });
+            $('#new-tweets').on('click', function() {
+              
+              var index = streams.home.length - 1;
+              while(index >= 0){
+                
+                var tweet = streams.home[index];
+                var $tweet = $('<p></p>');
+                var user = tweet.user;
+                var $user = $('<span class=\'user\'></span>');
+                var time = tweet.created_at;
+                var $time = jQuery.timeago(time);
+                $user.text('@' + user + ':');
+                $tweet.text(tweet.message)
+                $user.data('name', user);
+                if (generated.includes(tweet) === false) {
+                  $('#all-tweets').append($user, ['<span>' + tweet.message + '</span><span class= \'time-stamp\'>\t\t' + $time+  ' </span></p>']);
+                  generated.push(tweet);
+                }
+                index -= 1;
+              }
+              
+            });
 
-          $('#clear').on('click', function() {
-            clear('individual');
-            console.log('test');
-          });
+            //when you click on an individual user, it will display their tweets only
 
-          $('#submit').on('click', function() {
-            writeTweet(getTweet());
-          });
+            $('body').on('click', '.user' , function() {
+              clear('individual');
+              var currentUser = $(this).data('name');
+              displayTweets(currentUser);
+            });
 
-         
+            //clears the right column when a user wishes to
 
-          
+            $('#clear').on('click', function() {
+              clear('title-name');
+              clear('individual');
+              console.log('test');
+            });
+
+            //a function to allow the use to write their own tweets
+            //using the input form.  Tweet is displayed when they 
+            //press submit
+
+            $('#submit').on('click', function() {
+              writeTweet(getTweet());
+            });          
         });
 
     </script>   
