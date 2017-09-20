@@ -92,8 +92,8 @@ Allow a user to make a tweet
               $('#title-user').append($username);
               //iterate through the user's tweets from the back, so they display in reverse chronological order
               //display their tweets on the right column
-              var index = tweets.length - 1;
-              while(index >= 0){
+              var index = 0;
+              while(index < tweets.length){
                 
                 var tweet = tweets[index];
                 var user = tweet.user;
@@ -101,10 +101,10 @@ Allow a user to make a tweet
                 var $time = jQuery.timeago(time);
                 var message =(tweet.message)
                 if (!alreadyAdded.includes(tweet)) {
-                  ($('#individual').append('<p> ' + message + "<span class=\'time-stamp\'>\t\t" + $time + ' </span></p>'));
+                  ($('#individual').prepend('<p> ' + message + "<span class=\'time-stamp\'>\t\t" + $time + ' </span></p>'));
                   alreadyAdded.push(tweet);
                 }
-                index -= 1;
+                index += 1;
               }            
             }
             //a function to either initially retrieve or update all tweets from all users
@@ -112,8 +112,8 @@ Allow a user to make a tweet
             //updates each time the new tweets button is clicked
             $('#new-tweets').on('click', function() {
               
-              var index = streams.home.length - 1;
-              while(index >= 0){
+              var index = 0;
+              while(index <= streams.home.length - 1){
                 
                 var tweet = streams.home[index];
                 var $tweet = $('<p></p>');
@@ -128,7 +128,7 @@ Allow a user to make a tweet
                   $('#all-tweets').prepend($user, ['<span>' + tweet.message + '</span><span class= \'time-stamp\'>\t\t' + $time+  ' </span></p>']);
                   generated.push(tweet);
                 }
-                index -= 1;
+                index += 1;
               }
               
             });
