@@ -40,10 +40,9 @@ input{
 .col-container{
 	width: 100%;	
 	display: table;	
-	
-
-	
+	min-height: 800px	
 }
+
 
  
 .col-left{

@@ -101,7 +101,8 @@ Allow a user to make a tweet
                 var $time = jQuery.timeago(time);
                 var message =(tweet.message)
                 if (!alreadyAdded.includes(tweet)) {
-                  ($('#individual').prepend('<p> ' + message + "<span class=\'time-stamp\'>\t\t" + $time + ' </span></p>'));
+
+                  $('<p> ' + message + "<span class=\'time-stamp\'>\t\t" + $time + ' </span></p>').hide().prependTo("#individual").fadeIn("slow");
                   alreadyAdded.push(tweet);
                 }
                 index += 1;
@@ -110,8 +111,8 @@ Allow a user to make a tweet
             //a function to either initially retrieve or update all tweets from all users
             //displays them in reverse chronological order in the left column
             //updates each time the new tweets button is clicked
-            $('#new-tweets').on('click', function() {
-              
+            $('#new-tweets').on('click', function(e) {
+              e.preventDefault();
               var index = 0;
               while(index <= streams.home.length - 1){
                 
@@ -125,7 +126,9 @@ Allow a user to make a tweet
                 $tweet.text(tweet.message)
                 $user.data('name', user);
                 if (generated.includes(tweet) === false) {
-                  $('#all-tweets').prepend($user, ['<span>' + tweet.message + '</span><span class= \'time-stamp\'>\t\t' + $time+  ' </span></p>']);
+
+                  
+                  $('#all-tweets').hide().prepend($user, ['<span>' + tweet.message + '</span><span class= \'time-stamp\'>\t\t' + $time+  ' </span></p>']).fadeIn();
                   generated.push(tweet);
                 }
                 index += 1;
