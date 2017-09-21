@@ -21,8 +21,8 @@ Allow a user to make a tweet
   <body>
    
     <div class="header">
-      <h1>Twittler Fake!</h1>
-      <form>Submit a tweet:<input type="text" name="visitor-message" id="visitor-message"><button type="button" id="submit">Submit</button></form>
+      <h1>Twittler Remake</h1>
+      <form>your username:<input type="text" name="username" id="visitor-name">your message:<input type="text" name="visitor-message" id="visitor-message"><button type="button" id="submit">Submit</button></form>
     </div>
 
     <div class="col-container">
@@ -56,7 +56,6 @@ Allow a user to make a tweet
       <script>
           $(document).ready(function(){
             window.visitor = "shelldog42";
-            var visitor = "shelldog42"
             var alreadyAdded = [];
             var generated = [];
             var selectedUser;
@@ -64,7 +63,9 @@ Allow a user to make a tweet
             $("time.timeago").timeago();
             //a function to retrieve input from the submit a tweet form
             var getTweet = function() {
-              var input = $('input').val();
+              var user = $('#visitor-name').val();
+              window.visitor = user;
+              var input = $('#visitor-message').val();
               return input;
             }
             //get all tweets from any individual user
@@ -150,8 +151,10 @@ Allow a user to make a tweet
             //using the input form.  Tweet is displayed when they 
             //press submit
             $('#submit').on('click', function() {
-              writeTweet(getTweet());
-              $('#visitor-message').val("");
+              if ($('#visitor-message').val() !== "") {
+                writeTweet(getTweet());
+                $('#visitor-message').val("");
+              }
             });      
 
             $('input').keypress(function (e) {
