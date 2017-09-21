@@ -2,7 +2,7 @@
 streams is an object with two properties, users and home.
 streams.home is an array of all tweets from all the users you're following.
 streams.users is an object with properties for each user. streams.users.shawndrost has all of shawndrost's tweets.
-Make the refreshes prettier to look at, maybe animate?
+
 Allow a user to make a tweet
 -->
 
@@ -22,7 +22,7 @@ Allow a user to make a tweet
    
     <div class="header">
       <h1>Twittler Fake!</h1>
-      <form>Submit a tweet:<input type="text" name="visitor-tweet" id="visitor-message"><button type="button" id="submit">Submit</button></form>
+      <form>Submit a tweet:<input type="text" name="visitor-message" id="visitor-message"><button type="button" id="submit">Submit</button></form>
     </div>
 
     <div class="col-container">
@@ -55,7 +55,8 @@ Allow a user to make a tweet
 
       <script>
           $(document).ready(function(){
-            window.visitor = "@shelldog42";
+            window.visitor = "shelldog42";
+            var visitor = "shelldog42"
             var alreadyAdded = [];
             var generated = [];
             var selectedUser;
@@ -69,7 +70,6 @@ Allow a user to make a tweet
             //get all tweets from any individual user
             function getTweetsByUser(user) {
               var tweets = streams.users[user];
-              console.log(tweets);
               return tweets;
             }
             //clear all content from any element by the element's ID
@@ -111,8 +111,8 @@ Allow a user to make a tweet
             //a function to either initially retrieve or update all tweets from all users
             //displays them in reverse chronological order in the left column
             //updates each time the new tweets button is clicked
-            $('#new-tweets').on('click', function(e) {
-              e.preventDefault();
+            $('#new-tweets').on('click', function() {
+              
               var index = 0;
               while(index <= streams.home.length - 1){
                 
@@ -145,14 +145,22 @@ Allow a user to make a tweet
             $('#clear').on('click', function() {
               clear('title-name');
               clear('individual');
-              console.log('test');
             });
             //a function to allow the use to write their own tweets
             //using the input form.  Tweet is displayed when they 
             //press submit
             $('#submit').on('click', function() {
               writeTweet(getTweet());
-            });          
+              $('#visitor-message').val("");
+            });      
+
+            $('input').keypress(function (e) {
+              if (e.which == 13) {
+                $('#submit').click();
+                $('#visitor-message').val("");
+                return false;    //<---- Add this line
+              }
+});    
         });
     </script>   
   </body>
